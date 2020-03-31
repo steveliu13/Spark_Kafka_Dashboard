@@ -12,5 +12,8 @@ producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
 def Producer():
     while True:
-        producer.send("test", generateData())
+        data = generateData()
+        producer.send("test", data.encode('utf-8'))
+        time.sleep(1)
+        print("数据传输成功")
 

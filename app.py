@@ -13,12 +13,12 @@ from scripts.consumer import Consumer
 from scripts.producer import Producer
 from util import JsonUtil
 from util.DataUtil import consumeRecord
+from util.JsonUtil import json_deserialize2objlist
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app,async_mode=None)
 thread = None
-#consumer = KafkaConsumer('test')
 
 executor = ThreadPoolExecutor(1)
 thread_lock = Lock()
@@ -26,23 +26,24 @@ thread_lock = Lock()
 # 后台线程 产生数据，即刻推送至前端
 def background_thread():
     executor.submit(some_long_task1)
-    #executor.submit(some_long_task2)
-    """Example of how to send server generated events to clients."""
     count = 0
-    #while True:
     for msg in Consumer():
-        record = []
         json_data = msg.value.decode('utf-8')
+        print(json_data)
+        result = json_deserialize2objlist(json_data, consumeRecord)
+        scores = []
+        for res in result:
+            scores.append(res.amount)
 
-        score = record[0].amount
-        socketio.sleep(1)
         count += 1
         t = time.strftime('%M:%S', time.localtime()) # 获取系统时间（只取分:秒）
-        #cpus = psutil.cpu_percent(interval=None, percpu=True) # 获取系统cpu使用率 non-blocking
+        # cpus = psutil.cpu_percent(interval=None, percpu=True) # 获取系统cpu使用率 non-blocking
+        # print(cpus)
         socketio.emit('server_response',
                       # {'data': [t, *cpus], 'count': count},
-                      {'data': [t, *score], 'count': count},
+                      {'data': [t, *scores], 'count': count},
                       namespace='/test') # 注意：这里不需要客户端连接的上下文，默认 broadcast = True ！！！！！！！
+        socketio.sleep(1)
 
 
 def some_long_task1():
