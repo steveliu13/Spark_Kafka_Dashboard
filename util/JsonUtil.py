@@ -1,7 +1,5 @@
 import json
 
-from util.DataUtil import consumeRecord
-
 # 反序列化为obj
 def json_deserialize(json_data, obj):
     py_data = json.loads(json_data)
@@ -46,8 +44,6 @@ def json_deserialize2objlist(json_data,obj):
             record += "}"
         if not record.startswith("{"):
             record = "{" + record
-        print(record)
-        #temp = consumeRecord()
         temp = obj()
         json_deserialize(record, temp)
         result.append(temp)

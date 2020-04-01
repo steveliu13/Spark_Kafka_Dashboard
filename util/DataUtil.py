@@ -2,63 +2,28 @@ import json
 import time
 import random
 
+from model.consume_record_model import consume_record, record2dict
+
 genders = "男,女".split(",")
 cities = "北京,上海,广州,深圳".split(",")
-goodtypes = "交通,伙食,娱乐,教育,房产,其他".split(",")
-paymethods = "银联,支付宝,微信,现金".split(",")
+goods_types = "交通,餐饮,娱乐,教育,住房,其他".split(",")
+payments = "银联,支付宝,微信,现金".split(",")
 
 def generateData():
     records = []
-    for i in range(5):
+    for i in range(50):
         gender = genders[random.randint(0,1)]
         name = generateName(gender)
         phone = generatePhone()
         city = cities[random.randint(0,len(cities)-1)]
-        goodtype = goodtypes[random.randint(0,len(goodtypes)-1)]
+        goods_type = goods_types[random.randint(0, len(goods_types) - 1)]
         amount = random.randint(0,9999)
-        paymethod = paymethods[random.randint(0,len(paymethods)-1)]
-        consumetime = time.asctime( time.localtime(time.time()) )
-        records.append(consumeRecord(name, gender, phone, city, goodtype, amount, paymethod, consumetime))
+        payment = payments[random.randint(0, len(payments) - 1)]
+        consume_time = time.asctime(time.localtime(time.time()))
+        records.append(consume_record(name, gender, phone, city, goods_type, amount, payment, consume_time))
 
     return json.dumps(records,default=record2dict,ensure_ascii=False)
 
-
-class consumeRecord():
-    name=str
-    gender=str
-    phone=str
-    city=str
-    goodtype=str
-    amount=int
-    payMethod=str
-    consumeTime=time
-
-    def __init__(self, name='', gender='', phone='', city='', goodtype='', amount=0, payMethod='', consumeTime=''):
-        self.name = name
-        self.gender = gender
-        self.phone = phone
-        self.city = city
-        self.goodtype = goodtype
-        self.amount = amount
-        self.payMethod = payMethod
-        self.consumeTime = consumeTime
-
-def record2dict(record):
-    return {
-        'name': record.name,
-        'gender': record.gender,
-        'phone': record.phone,
-        'city': record.city,
-        'goodtype': record.goodtype,
-        'amount': record.amount,
-        'payMethod': record.payMethod,
-        'consumeTime': record.consumeTime
-    }
-
-def dict2record(d):
-    #return consumeRecord(d['name'], d['gender'], d['phone'],d['city'],d['goodtype'],d['amount'],d['payMethod'],d['consumeTime'])
-    return consumeRecord(d.get('name',None), d('gender',None), d('phone',None), d('city',None), d('goodtype',None), d('amount',None), d('payMethod',None),
-                         d('consumeTime',None))
 
 def generateName(gender):
     Surname = ["赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "褚", "卫", "蒋", "沈", "韩", "杨", "朱", "秦", "尤", "许",

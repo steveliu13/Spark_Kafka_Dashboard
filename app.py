@@ -1,68 +1,77 @@
-import json
 import time
 from threading import Lock
 
 from concurrent.futures import ThreadPoolExecutor
 
-import psutil as psutil
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from kafka import KafkaConsumer
 
+from model.consume_record_model import consume_record
 from scripts.consumer import Consumer
+from scripts.dataprocessing import calculateData
 from scripts.producer import Producer
-from util import JsonUtil
-from util.DataUtil import consumeRecord
 from util.JsonUtil import json_deserialize2objlist
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app,async_mode=None)
+socketio = SocketIO(app, async_mode=None)
 thread = None
-
-executor = ThreadPoolExecutor(1)
+executor = ThreadPoolExecutor(5)
 thread_lock = Lock()
+
 
 # 后台线程 产生数据，即刻推送至前端
 def background_thread():
-    executor.submit(some_long_task1)
+    executor.submit(producer_task)
     count = 0
     for msg in Consumer():
         json_data = msg.value.decode('utf-8')
-        print(json_data)
-        result = json_deserialize2objlist(json_data, consumeRecord)
-        scores = []
-        for res in result:
-            scores.append(res.amount)
-
+        result = json_deserialize2objlist(json_data, consume_record)
+        data = calculateData(result)
         count += 1
-        t = time.strftime('%M:%S', time.localtime()) # 获取系统时间（只取分:秒）
-        # cpus = psutil.cpu_percent(interval=None, percpu=True) # 获取系统cpu使用率 non-blocking
-        # print(cpus)
+        t = time.strftime('%H:%M:%S', time.localtime())  # 获取系统时间（只取分:秒）
         socketio.emit('server_response',
-                      # {'data': [t, *cpus], 'count': count},
-                      {'data': [t, *scores], 'count': count},
-                      namespace='/test') # 注意：这里不需要客户端连接的上下文，默认 broadcast = True ！！！！！！！
-        socketio.sleep(1)
+                      {'data': [t, *data], 'count': count},
+                      namespace='/dashboard')  # 注意：这里不需要客户端连接的上下文，默认 broadcast = True ！！！！！！！
+        print('socket-io传输数据成功')
+        socketio.sleep(2)
 
 
-def some_long_task1():
+# 另一个后台线程，不停生成数据
+def producer_task():
     Producer()
 
+
 # 与前端建立 socket 连接后，启动后台线程
-@socketio.on('connect', namespace='/test')
+@socketio.on('connect', namespace='/dashboard')
 def test_connect():
     global thread
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(target=background_thread)
 
-
-
 @app.route("/")
-def handle_mes():
-    return render_template("test.html",async_mode=socketio.async_mode)
+@app.route("/index")
+def index():
+    return render_template("index.html", async_mode=socketio.async_mode)
 
+
+@app.route("/city")
+def city():
+    return render_template("city.html", async_mode=socketio.async_mode)
+
+
+@app.route("/gender")
+def gender():
+    return render_template("gender.html", async_mode=socketio.async_mode)
+
+@app.route("/payment")
+def payment():
+    return render_template("payment.html", async_mode=socketio.async_mode)
+
+@app.route("/goodstype")
+def goods_type():
+    return render_template("goods_type.html", async_mode=socketio.async_mode)
 
 if __name__ == '__main__':
-    socketio.run(app,debug=True)
+    socketio.run(app, debug=True)
