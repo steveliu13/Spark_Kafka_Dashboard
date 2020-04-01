@@ -1,6 +1,12 @@
+
+from model.consume_record_model import consume_record
+from util.JsonUtil import json_deserialize2objlist
+
 # 把所有数据都放进一个list里，1-4城市，5-6性别，7-10支付方式，11-16消费类型
 # 暂时这么处理，后面做成sparkstreaming
-def calculateData(records):
+def calculateData(json_data):
+    # 先解析json为list
+    records = json_deserialize2objlist(json_data, consume_record)
     result = []
     beijing = shanghai= guangzhou = shenzhen = 0
     male = female = 0

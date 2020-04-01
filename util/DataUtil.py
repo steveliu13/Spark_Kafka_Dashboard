@@ -9,6 +9,7 @@ cities = "北京,上海,广州,深圳".split(",")
 goods_types = "交通,餐饮,娱乐,教育,住房,其他".split(",")
 payments = "银联,支付宝,微信,现金".split(",")
 
+# 生成50条随机数据，最后转为json格式
 def generateData():
     records = []
     for i in range(50):

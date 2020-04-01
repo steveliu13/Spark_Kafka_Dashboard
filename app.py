@@ -6,11 +6,9 @@ from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 
-from model.consume_record_model import consume_record
 from scripts.consumer import Consumer
 from scripts.dataprocessing import calculateData
 from scripts.producer import Producer
-from util.JsonUtil import json_deserialize2objlist
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -20,20 +18,20 @@ executor = ThreadPoolExecutor(5)
 thread_lock = Lock()
 
 
-# 后台线程 产生数据，即刻推送至前端
+# 后台线程 产生数据，然后推送至前端
 def background_thread():
     executor.submit(producer_task)
     count = 0
     for msg in Consumer():
         json_data = msg.value.decode('utf-8')
-        result = json_deserialize2objlist(json_data, consume_record)
-        data = calculateData(result)
+        data = calculateData(json_data)
         count += 1
         t = time.strftime('%H:%M:%S', time.localtime())  # 获取系统时间（只取分:秒）
         socketio.emit('server_response',
                       {'data': [t, *data], 'count': count},
                       namespace='/dashboard')  # 注意：这里不需要客户端连接的上下文，默认 broadcast = True ！！！！！！！
-        print('socket-io传输数据成功')
+        # print('socket-io传输数据成功')
+        # 休息一下
         socketio.sleep(2)
 
 
@@ -50,6 +48,7 @@ def test_connect():
         if thread is None:
             thread = socketio.start_background_task(target=background_thread)
 
+
 @app.route("/")
 @app.route("/index")
 def index():
@@ -65,13 +64,17 @@ def city():
 def gender():
     return render_template("gender.html", async_mode=socketio.async_mode)
 
+
 @app.route("/payment")
 def payment():
     return render_template("payment.html", async_mode=socketio.async_mode)
+
 
 @app.route("/goodstype")
 def goods_type():
     return render_template("goods_type.html", async_mode=socketio.async_mode)
 
+
+# 启动辣！
 if __name__ == '__main__':
     socketio.run(app, debug=True)

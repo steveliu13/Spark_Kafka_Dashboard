@@ -1,6 +1,6 @@
 import time
 
-
+# 消费记录模型
 class consume_record():
     name=str
     gender=str
@@ -21,6 +21,8 @@ class consume_record():
         self.payment = payment
         self.consume_time = consume_time
 
+
+# 用于序列化的方法
 def record2dict(record):
     return {
         'name': record.name,

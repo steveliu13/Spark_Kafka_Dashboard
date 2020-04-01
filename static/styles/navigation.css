@@ -26,27 +26,3 @@ a:hover {        /* 鼠标指针移动到链接上 */
   height: 30px;
   background: #f00;
 }
-/*nav{*/
-/*    float: left;*/
-/*    width:920px;*/
-/*    height:40px;*/
-/*    margin: 100px 0 0 0;*/
-/*    background-color: gray;*/
-/*    padding: 0 ;*/
-/*}*/
-/*nav ul li {*/
-/*    display: inline;*/
-/*}*/
-/*nav ul li a {*/
-/*    float: left;*/
-/*    padding: 11px 20px;*/
-/*    font-size: 14px;*/
-/*    text-align: center;*/
-/*    text-decoration: none;*/
-/*    color: #fff;*/
-/*    font-family: Tahoma;*/
-/*    outline: none;*/
-/*}*/
-/*nav li a:hover {*/
-/*    color: #2a5f00;*/
-/*}*/

@@ -6,10 +6,14 @@ from util.DataUtil import generateData
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
+# kafka生产者
 def Producer():
     while True:
+        # 数据是本地实时生成的随机数据
         data = generateData()
+        # 发送到名为test的topic上
         producer.send("test", data.encode('utf-8'))
+        # 暂停2S继续发，时间和前端刷新时间保持一致
         time.sleep(2)
-        print("kafka数据传输成功")
+        # print("kafka数据传输成功")
 
