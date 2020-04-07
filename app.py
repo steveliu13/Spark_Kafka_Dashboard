@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-
+import setting
 from scripts.consumer import Consumer
 from scripts.dataprocessing import calculateData
 from scripts.producer import Producer
@@ -16,7 +16,7 @@ socketio = SocketIO(app, async_mode=None)
 thread = None
 executor = ThreadPoolExecutor(5)
 thread_lock = Lock()
-
+app.config.from_object(setting.BaseConfig)
 
 # 后台线程 产生数据，然后推送至前端
 def background_thread():

@@ -1,9 +1,9 @@
 ## 实时交易数据分析平台
 ### 序章
 + 公司的带数据培训实战营要做出一个东西来，作为新组长试试做一个朴素的demo；
-+ 本来想用springboot做的，框架都搭好了，卡在了socketio上；
-+ 正好看到有个flask+socketio+echarts的CPU监控工具（不知道哪个博客是真的原创，就放这个[链接](https://www.cnblogs.com/hhh5460/p/7397006.html)）比较值得借鉴，就改成了相同的框架；
-+ 改成python后卡最长时间的json的序列化和反序列化，最后参考了（同样不知道是不是原的）[链接](https://www.cnblogs.com/magic8sky/p/10475704.html)，在此基础上写了一个反序列化为对象List的方法
++ 本来想用springboot做的，框架都搭好了，卡在了socketio上，正好看到有个flask+socketio+echarts的CPU监控工具（不知道哪个博客是真的原创，就放这个[链接](https://www.cnblogs.com/hhh5460/p/7397006.html)）比较值得借鉴，就改成了相同的框架；
++ 改成python后卡最长时间的json的序列化和反序列化，最后参考了（同样不知道是不是原的）[链接](https://www.cnblogs.com/magic8sky/p/10475704.html)，在此基础上写了一个反序列化为对象List的方法；
++ spark-streaming-kafka如果报错 Spark Streaming's Kafka libraries not found in class path. Try one of the following. 参考[链接](https://blog.csdn.net/weixin_40161254/article/details/103296937) 解决；
 
 ### 准备工作
 1. 会python，flask，基本的前端语法
@@ -29,10 +29,6 @@
 ### 后续工作
 - [ ] 数据处理改为spark流计算
 - [ ] 写个博客介绍一下
-- [ ] 可能加个配置文件，把kafka，spark这些配置放里面
+- [x] 加个配置文件，把kafka，spark这些配置放里面
 - [ ] 可能会学习一下前端，把页面做好看一点
 
-### 致谢
-1. 首先感谢公司和某学院提供的学习培训机会，确实学到了许多知识；
-2. 感谢某学院的蔡老师认真细致的辅导，问问题的时候我都觉得自己太菜了；
-3. 感谢素未谋面的组员们，下次线下实战营一定卜鸽；
