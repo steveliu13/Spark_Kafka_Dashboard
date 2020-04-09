@@ -3,16 +3,18 @@ import time
 import random
 
 from model.consume_record_model import consume_record, record2dict
+from setting import BaseConfig
 
 genders = "男,女".split(",")
 cities = "北京,上海,广州,深圳".split(",")
 goods_types = "交通,餐饮,娱乐,教育,住房,其他".split(",")
 payments = "银联,支付宝,微信,现金".split(",")
+record_count = BaseConfig.RECORD_COUNT
 
-# 生成50条随机数据，最后转为json格式
+# 生成随机数据，最后转为json格式
 def generateData():
     records = []
-    for i in range(50):
+    for i in range(record_count):
         gender = genders[random.randint(0,1)]
         name = generateName(gender)
         phone = generatePhone()

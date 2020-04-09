@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from flask import Flask, render_template
 from flask_socketio import SocketIO
+
 import setting
 from scripts.consumer import Consumer
 from scripts.dataprocessing import calculateData
