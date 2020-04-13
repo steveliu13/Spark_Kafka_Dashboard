@@ -1,7 +1,7 @@
 class BaseConfig(object):
     # 基础配置
     # kafka运行的zookeeper地址
-    ZK_ADDRESS = 'localhost:9092'
+    KAFKA_ADDRESS = 'localhost:9092'
     # 生成数据间隔
     GENERATE_INTERVAL = 2
     # kafka生产者的topic
@@ -12,6 +12,11 @@ class BaseConfig(object):
     SPARK_HOST = 'local[*]'
     # spark的程序名称
     SPARK_APP = 'DataProcessing'
+    # spark
+    SPARK_HOME = "/usr/local/spark/bin/"
+    JAR_PATH = "/Users/liuyudeng/Desktop/BigDataUnionpay/" \
+               "unionpay_dashboard/DashboardDataProcessing/" \
+               "out/artifacts/DashboardDataProcessing_jar"
     # kafka的groupid
     GROUP_ID = 'ycliu'
     # 每次生成的消费记录数量

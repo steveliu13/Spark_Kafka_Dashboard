@@ -8,7 +8,7 @@ from flask_socketio import SocketIO
 
 import setting
 from scripts.consumer import Consumer
-from scripts.dataprocessing import calculateData
+from scripts.dataprocessing import calculateData, calculateSparkStreaming, callStreaming
 from scripts.producer import Producer
 
 app = Flask(__name__)
@@ -22,10 +22,14 @@ app.config.from_object(setting.BaseConfig)
 # 后台线程 产生数据，然后推送至前端
 def background_thread():
     executor.submit(producer_task)
+    # TODO 等处理好jar包就启用
+    # executor.submit(streaming_task)
     count = 0
+    # 是调用流计算还是本地计算
+    flag = app.config["PRODUCER_TOPIC"] == app.config["CONSUMER_TOPIC"]
     for msg in Consumer():
         json_data = msg.value.decode('utf-8')
-        data = calculateData(json_data)
+        data = calculateData(json_data) if flag else calculateSparkStreaming(json_data)
         count += 1
         t = time.strftime('%H:%M:%S', time.localtime())  # 获取系统时间（只取分:秒）
         socketio.emit('server_response',
@@ -33,12 +37,15 @@ def background_thread():
                       namespace='/dashboard')  # 注意：这里不需要客户端连接的上下文，默认 broadcast = True ！！！！！！！
         # print('socket-io传输数据成功')
         # 休息一下
-        socketio.sleep(2)
+        socketio.sleep(app.config["GENERATE_INTERVAL"])
 
 
 # 另一个后台线程，不停生成数据
 def producer_task():
     Producer()
+
+def streaming_task():
+    callStreaming()
 
 
 # 与前端建立 socket 连接后，启动后台线程

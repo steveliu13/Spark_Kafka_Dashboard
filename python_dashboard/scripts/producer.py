@@ -5,7 +5,7 @@ import time
 from setting import BaseConfig
 from util.DataUtil import generateData
 
-bootstrap_servers = BaseConfig.ZK_ADDRESS
+bootstrap_servers = BaseConfig.KAFKA_ADDRESS
 producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
 
 # kafka生产者

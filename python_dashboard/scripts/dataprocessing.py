@@ -1,5 +1,7 @@
+import os
 
 from model.consume_record_model import consume_record
+from setting import BaseConfig
 from util.JsonUtil import json_deserialize2objlist
 
 # 把所有数据都放进一个list里，1-4城市，5-6性别，7-10支付方式，11-16消费类型
@@ -64,3 +66,18 @@ def calculateData(json_data):
     result.append(other)
     return result
 
+# 解析流计算的数据
+def calculateSparkStreaming(data):
+    arr0 = data.replace("[").replace("]").split(",")
+    arr1 = []
+    for element in arr0:
+        arr1.append(float(element))
+    return arr1
+
+# 启动scala的流计算
+def callStreaming():
+    setting_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))+"/setting.py"
+    jar_path = BaseConfig.JAR_PATH
+    spark_path = BaseConfig.SPARK_HOME
+    cmd = spark_path + "spark-submit --class KafkaProcessing "+jar_path + 'DashboardDataProcessing.jar '+setting_path
+    os.popen(cmd)
