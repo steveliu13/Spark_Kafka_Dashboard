@@ -15,7 +15,18 @@ import scala.collection.mutable
  */
 object KafkaProcessing {
   def main(args: Array[String]): Unit = {
-    val props = readFromTxtByLine("/Users/liuyudeng/Desktop/PyProjects/unionpay_dashboard/setting.py")
+    var setting_path: String=""
+    if(args.length<1){
+      setting_path = "/Users/liuyudeng/Desktop/BigDataUnionpay/unionpay_dashboard/python_dashboard/setting.py"
+    }else{
+      setting_path = args(0)
+    }
+
+    val props = readFromTxtByLine(setting_path)
+    //如果生产消费者名字一样则不用scala处理数据
+    if(props("PRODUCER_TOPIC")==props("CONSUMER_TOPIC")){
+      return
+    }
     val conf = new SparkConf()
       .setAppName(props("SPARK_APP"))
       .setMaster(props("SPARK_HOST"))
@@ -24,7 +35,7 @@ object KafkaProcessing {
     val topicsSet = Array(props("PRODUCER_TOPIC"))
     val kafkaParams = mutable.HashMap[String, String]()
     //必须添加以下参数，否则会报错
-    kafkaParams.put("bootstrap.servers", props("ZK_ADDRESS"))
+    kafkaParams.put("bootstrap.servers", props("KAFKA_ADDRESS"))
     kafkaParams.put("group.id", props("GROUP_ID"))
     kafkaParams.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     kafkaParams.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
@@ -138,7 +149,7 @@ object KafkaProcessing {
       var result = Array(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16)
 
       val kafkaProps = new Properties()
-      kafkaProps.put("bootstrap.servers", props("ZK_ADDRESS"))
+      kafkaProps.put("bootstrap.servers", props("KAFKA_ADDRESS"))
       kafkaProps.put("group.id", props("GROUP_ID"))
       kafkaProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
       kafkaProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
@@ -184,8 +195,8 @@ object KafkaProcessing {
     //将所有行放到数组中
     val lines = source.getLines()
     lines.foreach(t => {
-      if (t.contains("ZK_ADDRESS")) {
-        result += ("ZK_ADDRESS" -> t.split("=")(1).trim.replaceAll("'", ""))
+      if (t.contains("KAFKA_ADDRESS")) {
+        result += ("KAFKA_ADDRESS" -> t.split("=")(1).trim.replaceAll("'", ""))
       }
       if (t.contains("GENERATE_INTERVAL")) {
         result += ("GENERATE_INTERVAL" -> t.split("=")(1).trim.replaceAll("'", ""))
