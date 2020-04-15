@@ -7,7 +7,7 @@ class BaseConfig(object):
     # kafka生产者的topic
     PRODUCER_TOPIC = 'test'
     # kafka消费者的topic
-    CONSUMER_TOPIC = 'test'
+    CONSUMER_TOPIC = 'test_consumer'
     # 运行spark的主机地址
     SPARK_HOST = 'local[*]'
     # spark的程序名称
