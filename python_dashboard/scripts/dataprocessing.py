@@ -5,7 +5,7 @@ from setting import BaseConfig
 from util.JsonUtil import json_deserialize2objlist
 
 # 把所有数据都放进一个list里，1-4城市，5-6性别，7-10支付方式，11-16消费类型
-# 暂时这么处理，后面做成sparkstreaming
+# 如果不适用流计算就这么处理，后面做成sparkstreaming
 def calculateData(json_data):
     # 先解析json为list
     records = json_deserialize2objlist(json_data, consume_record)
@@ -68,7 +68,7 @@ def calculateData(json_data):
 
 # 解析流计算的数据
 def calculateSparkStreaming(data):
-    arr0 = data.replace("[").replace("]").split(",")
+    arr0 = data.replace("[","").replace("]","").split(",")
     arr1 = []
     for element in arr0:
         arr1.append(float(element))
