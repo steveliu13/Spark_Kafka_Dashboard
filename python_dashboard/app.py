@@ -36,7 +36,7 @@ def background_thread():
                       {'data': [t, *data], 'count': count},
                       namespace='/dashboard')  # 注意：这里不需要客户端连接的上下文，默认 broadcast = True ！！！！！！！
         # print('socket-io传输数据成功')
-        # 休息一下
+        # 休息一下,然后刷新
         socketio.sleep(app.config["GENERATE_INTERVAL"])
 
 
