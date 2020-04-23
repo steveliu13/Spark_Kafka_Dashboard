@@ -20,7 +20,7 @@ class BaseConfig(object):
     # kafka的groupid
     GROUP_ID = 'ycliu'
     # 每次生成的消费记录数量
-    RECORD_COUNT = 25
+    RECORD_COUNT = 50
 
 class TestConfig(BaseConfig):
     # 测试环境配置

@@ -50,7 +50,7 @@ object KafkaProcessing {
 
     val lines = messages.map(_.value)
     lines.print()
-    //转为RDD[性别，城市，消费型类，支付方式，金额]
+    //转为RDD[性别，城市，消费类型，支付方式，金额]
     val records = lines.flatMap(_.split("}, \\{")).map(t => {
       val kvs = t.split(",")
       (kvs(1).split(":")(1).replace("\"", "").trim,

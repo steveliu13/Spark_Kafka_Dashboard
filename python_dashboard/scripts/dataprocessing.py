@@ -81,3 +81,8 @@ def callStreaming():
     spark_path = BaseConfig.SPARK_HOME
     cmd = spark_path + "spark-submit --class KafkaProcessing "+jar_path + 'DashboardDataProcessing.jar '+setting_path
     os.popen(cmd)
+
+# 保存到数据库中
+def save2DB(data):
+    # TODO 未来会保存到数据库中
+    print("存储成功")

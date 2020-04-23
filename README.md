@@ -71,7 +71,13 @@
 
 ### 未解之谜
 
-1. 前端页面的导航栏，选中后颜色变化问题
-2. 前端页面刷新时间理论上应该是2s，实际上流计算环境是8s
+2. 前端页面刷新时间理论上应该是2s，实际上流计算环境是8s，过一会稳定后才会变回2s
 3. scala项目打包后本地无法运行，当前问题是Exception in thread "streaming-start" java.lang.NoClassDefFoundError: org/apache/spark/kafka010/KafkaConfigUpdater
+
+
+
+### 后续工作
+
+1. 添加数据库的支持，处理过数据的努力就不会木大了
+2. 找一个数据输入接口，随机生成数据不太靠谱
 
