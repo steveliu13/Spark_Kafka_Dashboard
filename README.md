@@ -4,6 +4,7 @@
 + 本来想用springboot做的，框架都搭好了，卡在了socketio上，正好看到有个flask+socketio+echarts的CPU监控工具（不知道哪个博客是真的原创，就放这个[链接](https://www.cnblogs.com/hhh5460/p/7397006.html)）比较值得借鉴，就改成了相同的框架；
 + 改成python后卡最长时间的json的序列化和反序列化，最后参考了（同样不知道是不是原的）[链接](https://www.cnblogs.com/magic8sky/p/10475704.html)，在此基础上写了一个反序列化为对象List的方法；
 + 最后包含两个项目，主项目是Flask 项目python_dashboard，辅助项目是Spark流计算数据处理项目DashboardDataProcessing；
++ 已经完成了水博客的工作，参考[Spark+Kafka构建实时数据分析面板](https://www.jianshu.com/p/c3e33f03c0dc)
 
 
 ### 准备工作
@@ -82,4 +83,3 @@
 
 1. 添加数据库的支持，处理过数据的努力就不会木大了；
 2. 找一个数据输入接口，随机生成数据不太靠谱；
-3. 写个博客介绍一下；
